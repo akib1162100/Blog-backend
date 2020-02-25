@@ -1,17 +1,21 @@
 using BlogApi.Models;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 
 namespace BlogApi.Services
 {
     public class PostService : IDbService<int, Blog>
     {
         public BlogContext Context;
+
+        
         
         public PostService (BlogContext context)
         {
             Context=context;
         }
+
 
         public Blog Get(int id)
         {
@@ -23,11 +27,14 @@ namespace BlogApi.Services
             return Context.Blogs.ToList();
         }
         
-        public Blog Add(Blog blog)
+        public Blog Add(BlogDTO blogDTO)
         {
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<BlogDTO, Blog>());
+            var mappre=new Mapper(config);
+            Blog blog=mappre.Map<Blog>(blogDTO);
             var result = Context.Add(blog);
             Context.SaveChanges();
-            return result.Entity;
+            return blog;
         }
         
         public Blog Update (Blog blog)

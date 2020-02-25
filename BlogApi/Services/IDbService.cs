@@ -6,7 +6,7 @@ namespace BlogApi.Services
     {
         EntityType Get(IdType id);
         List<EntityType> GetAll();
-        EntityType Add(EntityType entity);
+        // EntityType Add(EntityType entity);
         EntityType Update(EntityType entity);
         EntityType Delete(IdType id);
     }

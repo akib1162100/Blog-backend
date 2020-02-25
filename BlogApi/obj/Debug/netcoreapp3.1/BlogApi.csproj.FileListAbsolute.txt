@@ -48,3 +48,5 @@ D:\Blog-backend\BlogApi\obj\Debug\netcoreapp3.1\BlogApi.RazorTargetAssemblyInfo.
 D:\Blog-backend\BlogApi\obj\Debug\netcoreapp3.1\BlogApi.csproj.CopyComplete
 D:\Blog-backend\BlogApi\obj\Debug\netcoreapp3.1\BlogApi.dll
 D:\Blog-backend\BlogApi\obj\Debug\netcoreapp3.1\BlogApi.pdb
+D:\Blog-backend\BlogApi\bin\Debug\netcoreapp3.1\AutoMapper.dll
+D:\Blog-backend\BlogApi\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
