@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using BlogApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using BlogApi.Models;
+using BlogApi.Services;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,22 +10,21 @@ namespace BlogApi.Controller
     [ApiController]
     [Route("api/[controller]")]
         public class BlogController : ControllerBase
+    {
+        private readonly PostService _PostServices;
+        public BlogController(PostService service)=>_PostServices=service;
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult PostBlogItems(Blog blog)
         {
-            private readonly BlogContext _context;
-            public BlogController(BlogContext context)=>_context=context;
+            _PostServices.Add(blog);
 
-            [HttpPost]
-            [ProducesResponseType(StatusCodes.Status201Created)]
-            [ProducesResponseType(StatusCodes.Status400BadRequest)]
-            public ActionResult<Blog>PostBlogItems(Blog blog)
-            {
-                _context.Blogs.Add(blog);
-                _context.SaveChanges();
-
-                return Created("localhost", blog);
-            }
+            return Created("localhost", blog);
+        }
     
         
-        }
+    }
 
     }

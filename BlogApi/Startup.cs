@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using BlogApi.Models;
+using BlogApi.Services;
 
 
 namespace BlogApi
@@ -28,6 +29,7 @@ namespace BlogApi
             services.AddDbContext<BlogContext>
             (opt=>opt.UseSqlServer(Configuration["ConnectionStrings:BlogContext"]));
             services.AddControllers();
+            services.AddScoped<PostService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
