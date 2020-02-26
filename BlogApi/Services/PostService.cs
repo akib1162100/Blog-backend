@@ -6,9 +6,8 @@ using AutoMapper;
 
 namespace BlogApi.Services
 {
-    public class PostService : IDbService<int, Blog>
+    public class PostService 
     {
-        // public BlogContext Context;
         public PostRepository postRepository;
 
         
@@ -31,6 +30,7 @@ namespace BlogApi.Services
         
         public Blog Add(BlogDTO blogDTO)
         {
+
             var config = new MapperConfiguration(cfg => cfg.CreateMap<BlogDTO, Blog>());
             var mappre=new Mapper(config);
             Blog blog=mappre.Map<Blog>(blogDTO);

@@ -1,6 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-namespace BlogApi.Models
+namespace BlogApi.Data.Models
 {
     public class BlogDTO
     {

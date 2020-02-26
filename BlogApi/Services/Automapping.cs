@@ -1,5 +1,5 @@
 using AutoMapper;
-using BlogApi.Models;
+using BlogApi.Data.Models;
 namespace BlogApi.Services
 {
     public class AutoMapping : Profile

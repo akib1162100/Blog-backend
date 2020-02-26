@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using BlogApi.Models;
+using BlogApi.Data.Models;
 using BlogApi.Services;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
@@ -19,9 +19,9 @@ namespace BlogApi.Controller
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult PostBlogItems(BlogDTO blog)
+        public IActionResult PostBlogItems(BlogDTO blogDTO)
         {
-            Blog bg= _PostServices.Add(blog);
+            Blog bg= _PostServices.Add(blogDTO);
 
             return Created("localhost", bg);
         }
