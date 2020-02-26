@@ -6,24 +6,28 @@ using AutoMapper;
 
 namespace BlogApi.Services
 {
-    public class PostService : IPostService<int,Blog>
+    public class BlogService : IBlogService
     {
         public PostRepository postRepository;
         public readonly IMapper _mapper;
-        public PostService (PostRepository repository,IMapper mapper)
+        public BlogService (PostRepository repository,IMapper mapper)
         {
             this.postRepository=repository;
             this._mapper=mapper;
         }
-
-        public Blog Get(int id)
+        public BlogDTO Get(int id)
         {
-            return postRepository.Get(id);
+            Blog blog=postRepository.Get(id);
+            BlogDTO blogDTO=_mapper.Map<BlogDTO>(blog);
+            return blogDTO;
         }
         
-        public List<Blog> GetAll()
-        {
-            return postRepository.GetAll();
+        public List<BlogDTO> GetAll()
+        {   
+            List<Blog> blogs=postRepository.GetAll();
+            List<BlogDTO> blogDTOs=blogs.Select(blog=>_mapper.Map<BlogDTO>(blog)).ToList();
+            return blogDTOs;
+
         }  
         public Blog Update (Blog blog)
         {

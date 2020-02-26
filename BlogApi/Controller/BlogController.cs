@@ -12,8 +12,8 @@ namespace BlogApi.Controller
     [Route("api/[controller]")]
         public class BlogController : ControllerBase
     {
-        private readonly PostService _PostServices;
-        public BlogController(PostService service )=>_PostServices=service;
+        private readonly BlogService _PostServices;
+        public BlogController(BlogService service )=>_PostServices=service;
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -23,7 +23,24 @@ namespace BlogApi.Controller
             return Ok (_PostServices.Add(blogDTO));
 
         }
-            
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult GetAllBlogItems()
+        {
+            return Ok(_PostServices.GetAll());
+        }
+
+        [HttpGet("{blogDTO}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult GetAllBlogItem(int blogDTO)
+        {
+            return Ok(_PostServices.Get(blogDTO));
+        }
+
+
     }
 
 }
