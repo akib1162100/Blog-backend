@@ -12,22 +12,20 @@ namespace BlogApi.Data.Repository
         {
             Context=context;
         }
-
         public Blog Get(int id)
         {
             return Context.Blogs.Find(id);
-        }
-        
+        }        
         public List<Blog> GetAll()
         {
             return Context.Blogs.ToList();
         }
         
-        public Blog Add(Blog blog)
+        public int Add(Blog blog)
         {
-            var result = Context.Add(blog);
-            Context.SaveChanges();
-            return result.Entity;
+            Context.Add(blog);
+            int status= Context.SaveChanges();
+            return status;
         }
         
         public Blog Update (Blog blog)
@@ -35,7 +33,6 @@ namespace BlogApi.Data.Repository
             var result=Context.Update(blog);
             Context.SaveChanges();
             return result.Entity;
-
         }
         
         public Blog Delete (int id)

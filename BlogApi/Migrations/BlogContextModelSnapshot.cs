@@ -30,15 +30,15 @@ namespace BlogApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("PublishedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<DateTime>("publishedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("updationDate")
+                    b.Property<DateTime>("UpdationDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");

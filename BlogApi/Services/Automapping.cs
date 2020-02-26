@@ -7,6 +7,7 @@ namespace BlogApi.Services
         public AutoMapping()
         {
             CreateMap<BlogDTO, Blog>();
+            CreateMap<Blog, BlogDTO>();
         }
     }
 }

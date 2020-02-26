@@ -30,10 +30,10 @@ namespace BlogApi
         {
             services.AddDbContext<BlogContext>
             (opt=>opt.UseSqlServer(Configuration["ConnectionStrings:BlogContext"]));
-            services.AddControllers();
-            services.AddScoped<PostRepository>();
+            services.AddControllers(); 
+            services.AddScoped<PostRepository>();    
             services.AddScoped<PostService>();
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(AutoMapping));
             services.AddControllersWithViews();
         }
 

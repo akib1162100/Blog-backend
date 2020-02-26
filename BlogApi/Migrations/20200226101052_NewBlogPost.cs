@@ -15,8 +15,8 @@ namespace BlogApi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(maxLength: 200, nullable: false),
                     Body = table.Column<string>(nullable: false),
-                    publishedDate = table.Column<DateTime>(nullable: false),
-                    updationDate = table.Column<DateTime>(nullable: false)
+                    PublishedDate = table.Column<DateTime>(nullable: false),
+                    UpdationDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {

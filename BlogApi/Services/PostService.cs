@@ -6,17 +6,15 @@ using AutoMapper;
 
 namespace BlogApi.Services
 {
-    public class PostService 
+    public class PostService : IPostService<int,Blog>
     {
         public PostRepository postRepository;
-
-        
-        
-        public PostService (PostRepository repository)
+        public readonly IMapper _mapper;
+        public PostService (PostRepository repository,IMapper mapper)
         {
-            postRepository=repository;
+            this.postRepository=repository;
+            this._mapper=mapper;
         }
-
 
         public Blog Get(int id)
         {
@@ -26,28 +24,22 @@ namespace BlogApi.Services
         public List<Blog> GetAll()
         {
             return postRepository.GetAll();
-        }
-        
-        public Blog Add(BlogDTO blogDTO)
-        {
-
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<BlogDTO, Blog>());
-            var mappre=new Mapper(config);
-            Blog blog=mappre.Map<Blog>(blogDTO);
-            return postRepository.Add(blog);
-
-        }
-        
+        }  
         public Blog Update (Blog blog)
         {
             return postRepository.Update(blog);
-
         }
         
         public Blog Delete (int id)
         {
             return postRepository.Delete(id);
         }
-     
+
+        public bool Add(BlogDTO blogDTO)
+        {
+            Blog blog=_mapper.Map<Blog>(blogDTO);
+            int status=postRepository.Add(blog);
+            return status==1 ;
+        }
     }
 }

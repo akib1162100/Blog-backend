@@ -12,6 +12,6 @@ namespace BlogApi.Data.Models
         public string Body {get;set;}
        
         [DataType(DataType.Date)]
-        public DateTime publishedDate {get;set;}
+        public DateTime PublishedDate {get;set;}
     }
 }

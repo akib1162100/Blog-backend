@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApi.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    [Migration("20200226040110_NewBlogPost")]
+    [Migration("20200226101052_NewBlogPost")]
     partial class NewBlogPost
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,15 +32,15 @@ namespace BlogApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("PublishedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<DateTime>("publishedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("updationDate")
+                    b.Property<DateTime>("UpdationDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");

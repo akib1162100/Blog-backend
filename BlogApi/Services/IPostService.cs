@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 
-namespace BlogApi.Data.Repository
+namespace BlogApi.Services
 {
-    public interface IRepository<IdType, EntityType>
+    public interface IPostService<IdType, EntityType>
     {
         EntityType Get(IdType id);
         List<EntityType> GetAll();
-        int Add(EntityType entity);
+        // bool Add(EntityType entity);
         EntityType Update(EntityType entity);
         EntityType Delete(IdType id);
+
     }
 }

@@ -13,20 +13,17 @@ namespace BlogApi.Controller
         public class BlogController : ControllerBase
     {
         private readonly PostService _PostServices;
-        // private readonly IMapper _mapper;
-        public BlogController(PostService service)=>_PostServices=service;
+        public BlogController(PostService service )=>_PostServices=service;
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult PostBlogItems(BlogDTO blogDTO)
         {
-            Blog bg= _PostServices.Add(blogDTO);
+            return Ok (_PostServices.Add(blogDTO));
 
-            return Created("localhost", bg);
         }
-    
-        
+            
     }
 
-    }
+}
