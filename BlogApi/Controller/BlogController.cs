@@ -5,6 +5,7 @@ using BlogApi.Services;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using AutoMapper;
+using System;
 
 namespace BlogApi.Controller
 {
@@ -37,6 +38,7 @@ namespace BlogApi.Controller
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetAllBlogItem(int blogDTO)
         {
+           
             return Ok(_PostServices.Get(blogDTO));
         }
 
