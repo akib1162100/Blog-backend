@@ -2,6 +2,7 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using BlogApi.ExceptionHandler.Model;
 
 namespace BlogApi.ExceptionHandler
 {
@@ -13,13 +14,23 @@ namespace BlogApi.ExceptionHandler
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            Console.WriteLine("akash");
-            
-            Console.WriteLine("ash");
-
-            context.Result = new ObjectResult("500")
+            Exception exception=context.Exception;
+            if(exception==null)
+                return;
+            while(exception.InnerException!=null)
             {
-                StatusCode = 500,
+                exception=exception.InnerException;
+            }
+
+            ExceptionModel exceptionModel=new ExceptionModel
+            {
+                Source=exception.Source,
+                Message=exception.Message,
+            
+            };
+            context.Result=new ObjectResult(exceptionModel)
+            {
+                StatusCode=exceptionModel.Status
             };
             context.ExceptionHandled = true;
             

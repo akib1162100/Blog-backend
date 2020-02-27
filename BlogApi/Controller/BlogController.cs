@@ -37,8 +37,7 @@ namespace BlogApi.Controller
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetAllBlogItem(int blogDTO)
-        {
-           
+        {      
             return Ok(_PostServices.Get(blogDTO));
         }
 
