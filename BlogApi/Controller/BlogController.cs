@@ -14,15 +14,14 @@ namespace BlogApi.Controller
         public class BlogController : ControllerBase
     {
         private readonly BlogService _PostServices;
-        public BlogController(BlogService service )=>_PostServices=service;
+        public BlogController(BlogService service)=>_PostServices=service;
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult PostBlogItems(BlogDTO blogDTO)
         {
-            return Ok (_PostServices.Add(blogDTO));
-
+            return Created("localhost",_PostServices.Add(blogDTO));
         }
 
         [HttpGet]
@@ -40,8 +39,6 @@ namespace BlogApi.Controller
         {      
             return Ok(_PostServices.Get(blogDTO));
         }
-
-
     }
 
 }

@@ -9,7 +9,7 @@ namespace BlogApi.Services
         List<BlogDTO> GetAll();
         // bool Add(EntityType entity);
         Blog Update(Blog blog);
-        Blog Delete(int id);
+        // Blog Delete(int id);
 
     }
 }

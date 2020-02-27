@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApi.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    [Migration("20200226121101_NewBlogPost")]
+    [Migration("20200227053359_NewBlogPost")]
     partial class NewBlogPost
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

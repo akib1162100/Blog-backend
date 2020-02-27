@@ -33,12 +33,6 @@ namespace BlogApi.Services
         {
             return postRepository.Update(blog);
         }
-        
-        public Blog Delete (int id)
-        {
-            return postRepository.Delete(id);
-        }
-
         public bool Add(BlogDTO blogDTO)
         {
             Blog blog=_mapper.Map<Blog>(blogDTO);
