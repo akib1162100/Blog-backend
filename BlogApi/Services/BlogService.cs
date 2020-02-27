@@ -33,11 +33,25 @@ namespace BlogApi.Services
         {
             return postRepository.Update(blog);
         }
-        public bool Add(BlogDTO blogDTO)
+        public BlogDTO Add(BlogDTO blogDTO)
         {
-            Blog blog=_mapper.Map<Blog>(blogDTO);
+            Blog blog=_mapper.Map<BlogDTO,Blog>(blogDTO,opt =>
+            {
+                opt.BeforeMap((blogDTO,blog)=>blogDTO.Id=null);
+            });
+
             int status=postRepository.Add(blog);
-            return status==1 ;
+
+            if(status==1)
+            {
+                return blogDTO;
+            }
+            else
+            {
+                return null;
+            }
+
+
         }
     }
 }

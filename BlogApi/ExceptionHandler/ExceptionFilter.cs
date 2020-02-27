@@ -14,10 +14,10 @@ namespace BlogApi.ExceptionHandler
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            Exception exception=context.Exception;
+            var exception = context.Exception;
             if(exception==null)
                 return;
-            while(exception.InnerException!=null)
+            while(exception?.InnerException!=null)
             {
                 exception=exception.InnerException;
             }
@@ -25,16 +25,13 @@ namespace BlogApi.ExceptionHandler
             ExceptionModel exceptionModel=new ExceptionModel
             {
                 Source=exception.Source,
-                Message=exception.Message,
-            
+                Message=exception.Message, 
             };
             context.Result=new ObjectResult(exceptionModel)
             {
                 StatusCode=exceptionModel.Status
             };
             context.ExceptionHandled = true;
-            
         }       
-        
     }   
 }

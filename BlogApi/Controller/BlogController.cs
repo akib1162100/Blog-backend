@@ -13,31 +13,47 @@ namespace BlogApi.Controller
     [Route("api/[controller]")]
         public class BlogController : ControllerBase
     {
-        private readonly BlogService _PostServices;
-        public BlogController(BlogService service)=>_PostServices=service;
+        private readonly IBlogService blogService;
+        public BlogController(BlogService service)=>blogService=service;
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult PostBlogItems(BlogDTO blogDTO)
         {
-            return Created("localhost",_PostServices.Add(blogDTO));
+            if(!blogDTO.IsValid())
+            {
+                return BadRequest();
+            }
+            var result = blogService.Add(blogDTO);
+            if(result!=null)
+            {
+                return Created("localhost", result);
+            }
+            else
+            {
+                return BadRequest(); //TODO Servererror
+            }
+            
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetAllBlogItems()
         {
-            return Ok(_PostServices.GetAll());
+            if (ModelState.IsValid)
+            {
+                return Ok(blogService.GetAll());
+            }
+            return BadRequest();
         }
 
-        [HttpGet("{blogDTO}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult GetAllBlogItem(int blogDTO)
-        {      
-            return Ok(_PostServices.Get(blogDTO));
+        [HttpGet("{blogId}")]
+        public IActionResult GetBlogItem(int blogId)
+        {
+            BlogDTO blogDTO = blogService.Get(blogId);
+            if(blogDTO==null || !blogDTO.IsValid())
+            {
+                return BadRequest();
+            }
+            return Ok(blogDTO);
         }
     }
 
