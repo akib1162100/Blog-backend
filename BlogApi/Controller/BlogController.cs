@@ -71,20 +71,12 @@ namespace BlogApi.Controller
                 string relativeUri = $"{HttpContext.Request.GetDisplayUrl()}/ {blogDTO.Id.ToString()}";
                 if(result!=0)
                 {
-                    if(result ==2)
-                    {
-                        return Created(relativeUri,blogDTO);
-                    }
-                    else
-                    {
-                        return NoContent();
-                    }
+                    return NoContent();
                 }
                 else
                 {
                     return BadRequest();
                 }
-
             }
             else
             {

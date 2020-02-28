@@ -7,7 +7,7 @@ namespace BlogApi.Data.Repository
         EntityType Get(IdType id);
         List<EntityType> GetAll();
         int Add(EntityType entity);
-        int Update(EntityType entity);
+        bool Update(EntityType entity);
         EntityType Delete(IdType id);
     }
 }

@@ -6,8 +6,13 @@ namespace BlogApi.Data.Repository
 {
     public class PostRepository : IRepository<int, Blog>
     {
-    public BlogContext Context;
-        
+        public BlogContext Context;
+        public int contextSize;
+        public int getContextSize()
+        {
+            contextSize = Context.Blogs.Count();
+            return contextSize;
+        }
         public PostRepository (BlogContext context)
         {
             Context=context;
@@ -35,18 +40,18 @@ namespace BlogApi.Data.Repository
             }
         }
         
-        public int Update (Blog blog)
+        public bool Update (Blog blog)
         {
             Context.Blogs.Update(blog);
             var status = Context.SaveChanges();
-            int size = Context.Blogs.Count();
+           
             if (status==1)
             {
-                return size;
+                return true;
             }
             else
             {
-                return 0;
+                return false;
             }
         }
         
