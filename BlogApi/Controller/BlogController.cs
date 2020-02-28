@@ -83,7 +83,21 @@ namespace BlogApi.Controller
                 return BadRequest();
             }
         }
-       
+        [HttpDelete("{blogId}")]
+
+        public IActionResult DeletePost(int blogId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = blogService.Delete(blogId);
+            if(result)
+            {
+                return Ok();
+            }
+            return NoContent();
+        }
     }
 
 }
