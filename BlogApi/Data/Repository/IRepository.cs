@@ -8,6 +8,6 @@ namespace BlogApi.Data.Repository
         List<EntityType> GetAll();
         int Add(EntityType entity);
         bool Update(IdType id);
-        EntityType Delete(IdType id);
+        bool Delete(IdType id);
     }
 }

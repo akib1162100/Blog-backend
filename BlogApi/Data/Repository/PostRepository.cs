@@ -42,7 +42,7 @@ namespace BlogApi.Data.Repository
         
         public bool Update (int blogId)
         {
-            Blog findBlog = Context.Blogs.Find(blogId);
+            Blog findBlog =Get(blogId);
             if (findBlog == null)
             {
                 return false;
@@ -52,12 +52,16 @@ namespace BlogApi.Data.Repository
             return (status == 1);
         }
         
-        public Blog Delete (int id)
+        public bool Delete (int id)
         {
             var blog = Get(id);
-            var result =Context.Remove(blog);
-            Context.SaveChanges();
-            return result.Entity;
+            if(blog==null)
+            {
+                return false;
+            }
+            Context.Remove(blog);
+            var result= Context.SaveChanges();
+            return (result==1);
         }
     }
 

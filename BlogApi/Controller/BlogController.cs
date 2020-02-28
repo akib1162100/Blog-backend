@@ -75,7 +75,7 @@ namespace BlogApi.Controller
                 }
                 else
                 {
-                    return BadRequest();
+                    return BadRequest(); //TODO: sending proper Response 
                 }
             }
             else
@@ -83,6 +83,7 @@ namespace BlogApi.Controller
                 return BadRequest();
             }
         }
+       
     }
 
 }

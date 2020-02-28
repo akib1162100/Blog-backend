@@ -60,5 +60,11 @@ namespace BlogApi.Services
 
 
         }
+
+        public bool Delete(int blogId)
+        {
+            var status = postRepository.Delete(blogId);
+            return status;
+        }
     }
 }
