@@ -29,9 +29,26 @@ namespace BlogApi.Services
             return blogDTOs;
 
         }  
-        public Blog Update (Blog blog)
+        public int Update (BlogDTO blogDTO)
         {
-            return postRepository.Update(blog);
+            Blog blog = _mapper.Map<Blog>(blogDTO);
+            int statusCount=postRepository.Update(blog);
+            if(statusCount != 0)
+            {
+                if(blogDTO.Id>statusCount)
+                {
+                    return 2;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+            else
+            {
+                return 0;
+            }
+
         }
         public BlogDTO Add(BlogDTO blogDTO)
         {
@@ -39,11 +56,10 @@ namespace BlogApi.Services
             {
                 opt.BeforeMap((blogDTO,blog)=>blogDTO.Id=null);
             });
-
-            int status=postRepository.Add(blog);
-
-            if(status==1)
+            int receivedId=postRepository.Add(blog);
+            if(receivedId!=0)
             {
+                blogDTO.Id = receivedId;
                 return blogDTO;
             }
             else

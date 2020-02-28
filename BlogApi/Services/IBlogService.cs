@@ -8,7 +8,7 @@ namespace BlogApi.Services
         BlogDTO Get(int id);
         List<BlogDTO> GetAll();
         BlogDTO Add(BlogDTO entity);
-        Blog Update(Blog blog);
+        int Update(BlogDTO blogDTO);
         // Blog Delete(int id);
 
     }

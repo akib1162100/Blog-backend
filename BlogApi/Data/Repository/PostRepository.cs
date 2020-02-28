@@ -25,14 +25,29 @@ namespace BlogApi.Data.Repository
         {
             Context.Add(blog);
             int status= Context.SaveChanges();
-            return status;
+            if(status==1)
+            {
+                return blog.Id;
+            }
+            else
+            {
+                return 0;
+            }
         }
         
-        public Blog Update (Blog blog)
+        public int Update (Blog blog)
         {
-            var result=Context.Update(blog);
-            Context.SaveChanges();
-            return result.Entity;
+            Context.Blogs.Update(blog);
+            var status = Context.SaveChanges();
+            int size = Context.Blogs.Count();
+            if (status==1)
+            {
+                return size;
+            }
+            else
+            {
+                return 0;
+            }
         }
         
         public Blog Delete (int id)

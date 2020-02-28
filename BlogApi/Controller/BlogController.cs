@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using BlogApi.Data.Models;
+using Microsoft.AspNetCore.Http.Extensions;
 using BlogApi.Services;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
@@ -19,41 +20,76 @@ namespace BlogApi.Controller
         [HttpPost]
         public IActionResult PostBlogItems(BlogDTO blogDTO)
         {
-            if(!blogDTO.IsValid())
+            if (ModelState.IsValid && blogDTO.IsValid())
             {
-                return BadRequest();
-            }
-            var result = blogService.Add(blogDTO);
-            if(result!=null)
-            {
-                return Created("localhost", result);
+                var result = blogService.Add(blogDTO);
+                string relativeUri = $"{HttpContext.Request.GetDisplayUrl()}/ {result.Id.ToString()}";
+                return Created(relativeUri, result);
             }
             else
             {
-                return BadRequest(); //TODO Servererror
+                return BadRequest();
             }
-            
         }
 
         [HttpGet]
         public IActionResult GetAllBlogItems()
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return Ok(blogService.GetAll());
+                return BadRequest();
             }
-            return BadRequest();
+            var getAllBlogs = blogService.GetAll();
+            if(getAllBlogs==null)
+            {
+                return NotFound();
+            }
+            return Ok(getAllBlogs);
         }
 
         [HttpGet("{blogId}")]
         public IActionResult GetBlogItem(int blogId)
         {
-            BlogDTO blogDTO = blogService.Get(blogId);
-            if(blogDTO==null || !blogDTO.IsValid())
+            if(!ModelState.IsValid)
             {
                 return BadRequest();
             }
+            BlogDTO blogDTO = blogService.Get(blogId);
+            if(blogDTO==null)
+            {
+                return NotFound();
+            }
             return Ok(blogDTO);
+        }
+
+        [HttpPut("{blogId}")]
+        public IActionResult PutItem(BlogDTO blogDTO)
+        {
+            if (ModelState.IsValid && blogDTO.IsValid())
+            {
+                var result = blogService.Update(blogDTO);
+                string relativeUri = $"{HttpContext.Request.GetDisplayUrl()}/ {blogDTO.Id.ToString()}";
+                if(result!=0)
+                {
+                    if(result ==2)
+                    {
+                        return Created(relativeUri,blogDTO);
+                    }
+                    else
+                    {
+                        return NoContent();
+                    }
+                }
+                else
+                {
+                    return BadRequest();
+                }
+
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 
