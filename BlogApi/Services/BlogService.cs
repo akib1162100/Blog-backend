@@ -32,12 +32,8 @@ namespace BlogApi.Services
         public int Update (BlogDTO blogDTO)
         {
             Blog blog = _mapper.Map<Blog>(blogDTO);
-            int dbSize = postRepository.getContextSize();
-            if(blogDTO.Id>dbSize)
-            {
-                return 0;
-            }
-            bool statusCount=postRepository.Update(blog);
+            int blogId = blog.Id;
+            bool statusCount=postRepository.Update(blogId);
             if(statusCount)
             {
                 return 1;

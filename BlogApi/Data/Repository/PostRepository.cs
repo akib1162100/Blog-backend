@@ -40,19 +40,16 @@ namespace BlogApi.Data.Repository
             }
         }
         
-        public bool Update (Blog blog)
+        public bool Update (int blogId)
         {
-            Context.Blogs.Update(blog);
-            var status = Context.SaveChanges();
-           
-            if (status==1)
-            {
-                return true;
-            }
-            else
+            Blog findBlog = Context.Blogs.Find(blogId);
+            if (findBlog == null)
             {
                 return false;
             }
+            Context.Blogs.Update(findBlog);
+            var status = Context.SaveChanges();
+            return (status == 1);
         }
         
         public Blog Delete (int id)

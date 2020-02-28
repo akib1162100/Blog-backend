@@ -62,7 +62,7 @@ namespace BlogApi.Controller
             return Ok(blogDTO);
         }
 
-        [HttpPut("{blogId}")]
+        [HttpPut]
         public IActionResult PutItem(BlogDTO blogDTO)
         {
             if (ModelState.IsValid && blogDTO.IsValid())
