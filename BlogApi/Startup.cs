@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using BlogApi.Data.Models;
+using BlogApi.ExceptionHandler;
 using BlogApi.Data.Repository;
 using AutoMapper;
 using BlogApi.Services;
@@ -30,11 +31,11 @@ namespace BlogApi
         {
             services.AddDbContext<BlogContext>
             (opt=>opt.UseSqlServer(Configuration["ConnectionStrings:BlogContext"]));
-            services.AddControllers(); 
+            services.AddControllers(options =>
+                options.Filters.Add(new ExceptionFilter())).AddXmlSerializerFormatters(); 
             services.AddScoped<PostRepository>();    
-            services.AddScoped<PostService>();
+            services.AddScoped<BlogService>();
             services.AddAutoMapper(typeof(AutoMapping));
-            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
