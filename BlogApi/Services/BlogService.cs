@@ -1,4 +1,5 @@
 using BlogApi.Data.Models;
+using BlogApi.Data;
 using BlogApi.Data.Repository;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,7 @@ namespace BlogApi.Services
             Blog blog=postRepository.Get(id);
             BlogDTO blogDTO=_mapper.Map<BlogDTO>(blog);
             return blogDTO;
-        }
-        
+        }     
         public List<BlogDTO> GetAll()
         {   
             List<Blog> blogs=postRepository.GetAll();
@@ -29,17 +29,12 @@ namespace BlogApi.Services
             return blogDTOs;
 
         }  
-        public int Update (BlogDTO blogDTO)
+        public MessageEnum Update (BlogDTO blogDTO)
         {
             Blog blog = _mapper.Map<Blog>(blogDTO);
             int blogId = blog.Id;
-            bool statusCount=postRepository.Update(blogId);
-            if(statusCount)
-            {
-                return 1;
-            }
-            return 0;
-
+            MessageEnum messageEnum=postRepository.Update(blogId);
+            return messageEnum;
         }
         public BlogDTO Add(BlogDTO blogDTO)
         {
@@ -57,8 +52,11 @@ namespace BlogApi.Services
             {
                 return null;
             }
-
-
+        }
+        public MessageEnum Delete(int blogId)
+        {
+            var messageEnum = postRepository.Delete(blogId);
+            return messageEnum;
         }
     }
 }

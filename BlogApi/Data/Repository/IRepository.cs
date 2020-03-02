@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using BlogApi.Data;
 namespace BlogApi.Data.Repository
 {
     public interface IRepository<IdType, EntityType>
@@ -7,7 +7,7 @@ namespace BlogApi.Data.Repository
         EntityType Get(IdType id);
         List<EntityType> GetAll();
         int Add(EntityType entity);
-        bool Update(IdType id);
-        EntityType Delete(IdType id);
+        MessageEnum Update(IdType id);
+        MessageEnum Delete(IdType id);
     }
 }
