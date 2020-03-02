@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BlogApi.Data.Models;
+using BlogApi.Data;
 
 namespace BlogApi.Services
 {
@@ -8,8 +9,8 @@ namespace BlogApi.Services
         BlogDTO Get(int id);
         List<BlogDTO> GetAll();
         BlogDTO Add(BlogDTO entity);
-        int Update(BlogDTO blogDTO);
-        bool Delete(int id);
+        MessageEnum Update(BlogDTO blogDTO);
+        MessageEnum Delete(int id);
 
     }
 }

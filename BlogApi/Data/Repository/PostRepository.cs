@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BlogApi.Data.Models;
+using BlogApi.Data;
 
 namespace BlogApi.Data.Repository
 {
@@ -25,7 +26,6 @@ namespace BlogApi.Data.Repository
         {
             return Context.Blogs.ToList();
         }
-        
         public int Add(Blog blog)
         {
             Context.Add(blog);
@@ -38,30 +38,29 @@ namespace BlogApi.Data.Repository
             {
                 return 0;
             }
-        }
-        
-        public bool Update (int blogId)
+        }    
+        public MessageEnum Update (int blogId)
         {
             Blog findBlog =Get(blogId);
             if (findBlog == null)
             {
-                return false;
+                return MessageEnum.NotFound;
             }
             Context.Blogs.Update(findBlog);
             var status = Context.SaveChanges();
-            return (status == 1);
+            return (status == 1) ? MessageEnum.Updated : MessageEnum.NotModified;
         }
         
-        public bool Delete (int id)
+        public MessageEnum Delete (int id)
         {
             var blog = Get(id);
             if(blog==null)
             {
-                return false;
+                return MessageEnum.NotFound;
             }
             Context.Remove(blog);
-            var result= Context.SaveChanges();
-            return (result==1);
+            var status= Context.SaveChanges();
+            return (status == 1) ? MessageEnum.Deleted : MessageEnum.NotModified;
         }
     }
 
