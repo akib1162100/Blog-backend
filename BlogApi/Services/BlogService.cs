@@ -29,11 +29,11 @@ namespace BlogApi.Services
             return blogDTOs;
 
         }  
-        public MessageEnum Update (BlogDTO blogDTO)
+        public DbResponse Update (BlogDTO blogDTO)
         {
             Blog blog = _mapper.Map<Blog>(blogDTO);
             int blogId = blog.Id;
-            MessageEnum messageEnum=postRepository.Update(blogId);
+            DbResponse messageEnum=postRepository.Update(blogId);
             return messageEnum;
         }
         public BlogDTO Add(BlogDTO blogDTO)
@@ -53,7 +53,7 @@ namespace BlogApi.Services
                 return null;
             }
         }
-        public MessageEnum Delete(int blogId)
+        public DbResponse Delete(int blogId)
         {
             var messageEnum = postRepository.Delete(blogId);
             return messageEnum;

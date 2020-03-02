@@ -39,28 +39,28 @@ namespace BlogApi.Data.Repository
                 return 0;
             }
         }    
-        public MessageEnum Update (int blogId)
+        public DbResponse Update (int blogId)
         {
             Blog findBlog =Get(blogId);
             if (findBlog == null)
             {
-                return MessageEnum.NotFound;
+                return DbResponse.NotFound;
             }
             Context.Blogs.Update(findBlog);
             var status = Context.SaveChanges();
-            return (status == 1) ? MessageEnum.Updated : MessageEnum.NotModified;
+            return (status == 1) ? DbResponse.Updated : DbResponse.NotModified;
         }
         
-        public MessageEnum Delete (int id)
+        public DbResponse Delete (int id)
         {
             var blog = Get(id);
             if(blog==null)
             {
-                return MessageEnum.NotFound;
+                return DbResponse.NotFound;
             }
             Context.Remove(blog);
             var status= Context.SaveChanges();
-            return (status == 1) ? MessageEnum.Deleted : MessageEnum.NotModified;
+            return (status == 1) ? DbResponse.Deleted : DbResponse.NotModified;
         }
     }
 

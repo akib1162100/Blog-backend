@@ -29,12 +29,12 @@ namespace BlogApi.Controller
         [HttpGet]
         public IActionResult GetAllBlogItems()
         {
-            var getAllBlogs = blogService.GetAll();
-            if (getAllBlogs == null)
+            var blogs = blogService.GetAll();
+            if (blogs == null)
             {
                 return NotFound();
             }
-            return Ok(getAllBlogs);
+            return Ok(blogs);
         }
         [HttpGet("{blogId}")]
         public IActionResult GetBlogItem(int blogId)
@@ -52,11 +52,11 @@ namespace BlogApi.Controller
         {
             var result = blogService.Update(blogDTO);
             string relativeUri = $"{HttpContext.Request.GetDisplayUrl()}/ {blogDTO.Id.ToString()}";
-            if (result == MessageEnum.Updated)
+            if (result == DbResponse.Updated)
             {
                 return NoContent();
             }
-            else if (result == MessageEnum.NotFound)
+            else if (result == DbResponse.NotFound)
             {
                 return NotFound();
             }
@@ -69,7 +69,7 @@ namespace BlogApi.Controller
         public IActionResult DeletePost(int blogId)
         {
             var result = blogService.Delete(blogId);
-            if (result == MessageEnum.Deleted)
+            if (result == DbResponse.Deleted)
             {
                 return Ok("Successfully Deleted");
             }

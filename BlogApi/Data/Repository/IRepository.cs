@@ -7,7 +7,7 @@ namespace BlogApi.Data.Repository
         EntityType Get(IdType id);
         List<EntityType> GetAll();
         int Add(EntityType entity);
-        MessageEnum Update(IdType id);
-        MessageEnum Delete(IdType id);
+        DbResponse Update(IdType id);
+        DbResponse Delete(IdType id);
     }
 }

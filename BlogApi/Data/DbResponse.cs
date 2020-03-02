@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Data
 {
-    public enum MessageEnum
+    public enum DbResponse
     {
         Added,
         Updated,
