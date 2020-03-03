@@ -24,11 +24,9 @@ namespace BlogApi.Services
             User user=_mapper.Map<UserRegistrationDTO,User>(userRegistrationDTO,opt =>
             {
                 opt.BeforeMap((userRegistrationDTO,user)=>userRegistrationDTO.Password=null);
-                opt.AfterMap((userRegistrationDTO,user)=>user.PasswordHash = passwordHash);
-                opt.AfterMap((userRegistrationDTO,user)=>user.PasswordSalt = passwordSalt);
             });
-            // user.PasswordHash = passwordHash;
-            // user.PasswordSalt = passwordSalt;
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
             bool userExist=authRepository.UserExists(userRegistrationDTO);
             if(userExist)
             {
@@ -55,17 +53,17 @@ namespace BlogApi.Services
             if(user == null)
                 return DbResponse.DoesNotExists; 
 
-            if(!VerifyPassword(password, user.PasswordHash,user.PasswordSalt))
+            if(!VerifyPassword(password,user.PasswordHash,user.PasswordSalt))
                 return DbResponse.PasswordMissmach;
-            
             return DbResponse.Successful;
         }
-        private bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
+        private bool VerifyPassword(string password,byte[] passwordHash, byte[] passwordSalt)
         {
             using(var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt)){ 
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password)); 
                 for (int i = 0; i < computedHash.Length; i++){ 
-                    if(computedHash[i] != passwordHash[i]) return false; 
+                    if(computedHash[i] != passwordHash[i])
+                        return false; 
                 }    
             }
             return true;

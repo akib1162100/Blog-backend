@@ -13,7 +13,7 @@ namespace BlogApi.Data.Repository
         }
         public User Login(string userId)
         {
-            var user =  _context.Users.FirstOrDefault(x => x.UserID == userId);
+            var user = _context.Users.Find(userId);
             if(user == null)
                 return null; 
             return user;
@@ -24,7 +24,6 @@ namespace BlogApi.Data.Repository
             var status = _context.SaveChanges();
             return(status==1)? DbResponse.Added:DbResponse.Failed; 
         }
-
         public bool UserExists(UserRegistrationDTO userRegistrationDTO)
         {
             var userId =userRegistrationDTO.UserID;
