@@ -34,7 +34,10 @@ namespace BlogApi
             services.AddControllers(options =>
                 options.Filters.Add(new ExceptionFilter())).AddXmlSerializerFormatters(); 
             services.AddScoped<PostRepository>();    
+            services.AddScoped<AuthRepository>();    
             services.AddScoped<BlogService>();
+            services.AddScoped<AuthServices>();    
+
             services.AddAutoMapper(typeof(AutoMapping));
         }
 

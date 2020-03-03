@@ -8,6 +8,8 @@ namespace BlogApi.Services
         {
             CreateMap<BlogDTO, Blog>();
             CreateMap<Blog, BlogDTO>();
+            CreateMap<UserRegistrationDTO,User>();
+            CreateMap<User,UserRegistrationDTO>();
         }
     }
 }

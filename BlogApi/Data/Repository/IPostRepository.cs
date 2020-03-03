@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using BlogApi.Data;
 namespace BlogApi.Data.Repository
 {
-    public interface IRepository<IdType, EntityType>
+    public interface IPostRepository<IdType, EntityType>
     {
         EntityType Get(IdType id);
         List<EntityType> GetAll();

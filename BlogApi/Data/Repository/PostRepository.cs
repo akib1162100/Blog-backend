@@ -5,31 +5,25 @@ using BlogApi.Data;
 
 namespace BlogApi.Data.Repository
 {
-    public class PostRepository : IRepository<int, Blog>
+    public class PostRepository : IPostRepository<int, Blog>
     {
-        public BlogContext Context;
-        public int contextSize;
-        public int getContextSize()
-        {
-            contextSize = Context.Blogs.Count();
-            return contextSize;
-        }
+        private readonly BlogContext _context;
         public PostRepository (BlogContext context)
         {
-            Context=context;
+            _context=context;
         }
         public Blog Get(int id)
         {
-            return Context.Blogs.Find(id);
+            return _context.Blogs.Find(id);
         }        
         public List<Blog> GetAll()
         {
-            return Context.Blogs.ToList();
+            return _context.Blogs.ToList();
         }
         public int Add(Blog blog)
         {
-            Context.Add(blog);
-            int status= Context.SaveChanges();
+            _context.Add(blog);
+            int status= _context.SaveChanges();
             if(status==1)
             {
                 return blog.Id;
@@ -46,8 +40,8 @@ namespace BlogApi.Data.Repository
             {
                 return DbResponse.NotFound;
             }
-            Context.Blogs.Update(findBlog);
-            var status = Context.SaveChanges();
+            _context.Blogs.Update(findBlog);
+            var status = _context.SaveChanges();
             return (status == 1) ? DbResponse.Updated : DbResponse.NotModified;
         }
         
@@ -58,8 +52,8 @@ namespace BlogApi.Data.Repository
             {
                 return DbResponse.NotFound;
             }
-            Context.Remove(blog);
-            var status= Context.SaveChanges();
+            _context.Remove(blog);
+            var status= _context.SaveChanges();
             return (status == 1) ? DbResponse.Deleted : DbResponse.NotModified;
         }
     }

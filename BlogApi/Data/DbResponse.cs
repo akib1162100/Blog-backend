@@ -12,6 +12,10 @@ namespace BlogApi.Data
         Failed,
         NotFound,
         NotModified,
-        Deleted
+        Deleted,
+        Exists,
+        DoesNotExists,
+        Successful,
+        PasswordMissmach,
     }
 }
