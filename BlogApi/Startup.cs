@@ -31,13 +31,13 @@ namespace BlogApi
         {
             services.AddDbContext<BlogContext>
             (opt=>opt.UseSqlServer(Configuration["ConnectionStrings:BlogContext"]));
-            services.AddControllers(options =>
-                options.Filters.Add(new ExceptionFilter())).AddXmlSerializerFormatters(); 
+            services.AddFilterControllers();
+            services.AddJwtBearer(Configuration);
+            services.AddAuthorization(); 
             services.AddScoped<PostRepository>();    
             services.AddScoped<AuthRepository>();    
             services.AddScoped<BlogService>();
             services.AddScoped<AuthServices>();    
-
             services.AddAutoMapper(typeof(AutoMapping));
         }
 
@@ -46,6 +46,8 @@ namespace BlogApi
         {
     
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
