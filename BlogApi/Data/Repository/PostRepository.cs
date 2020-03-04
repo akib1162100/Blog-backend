@@ -52,13 +52,13 @@ namespace BlogApi.Data.Repository
         public DbResponse Delete (int id,string userId)
         {
             var blog = Get(id);
-            if(blog.ReporterId!=userId)
-            {
-                return DbResponse.Forbidden;
-            }
             if(blog==null)
             {
                 return DbResponse.NotFound;
+            }
+            if(blog.ReporterId!=userId)
+            {
+                return DbResponse.Forbidden;
             }
             _context.Remove(blog);
             var status= _context.SaveChanges();

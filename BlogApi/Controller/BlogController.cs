@@ -84,13 +84,14 @@ namespace BlogApi.Controller
             var result = blogService.Delete(blogId,userId);
             if(result==DbResponse.Forbidden)
             {
-                return Forbid("Not Your post");
+                return BadRequest("Not Your post");
             }
-            if (result == DbResponse.Deleted)
+            else if (result == DbResponse.Deleted)
             {
                 return Ok("Successfully Deleted");
             }
-            return NoContent();
+            else
+                return NoContent();
         }
     }    
 }
