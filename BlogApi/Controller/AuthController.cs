@@ -33,16 +33,17 @@ namespace BlogApi.Controller
         [HttpPost("[action]")]
         public IActionResult Login(UserLoginDTO userLoginDTO)
         {
-            DbResponse status=_authService.Login(userLoginDTO);
-            if(status==DbResponse.DoesNotExists)
+           var result= _authService.Login(userLoginDTO);
+            
+            if(result.response==DbResponse.DoesNotExists)
             {
                 return BadRequest("User doesn't exist");
             }
-            if(status==DbResponse.PasswordMissmach)
+            if(result.response==DbResponse.PasswordMissmach)
             {
                 return BadRequest("Invalid password");
             }
-            return Ok("Successfully Logged In");
+            return Ok(result.userDTO);
         }
     }
 }

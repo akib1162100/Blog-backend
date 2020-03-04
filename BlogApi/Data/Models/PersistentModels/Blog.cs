@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace BlogApi.Data.Models
 {
     public class Blog
@@ -14,6 +16,9 @@ namespace BlogApi.Data.Models
         [DataType(DataType.Date)]
         public DateTime PublishedDate {get;set;}
         public DateTime UpdationDate {get;set;}
+        public User Reporter { get; set; }
+        [ForeignKey("Reporter")]
+        public string ReporterId { get; set; }
 
     }
 }

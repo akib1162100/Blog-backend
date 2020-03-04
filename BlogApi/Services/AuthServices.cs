@@ -1,5 +1,6 @@
 using BlogApi.Data.Models;
 using BlogApi.Data;
+using BlogApi.Jwt;
 using BlogApi.Data.Repository;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,14 @@ namespace BlogApi.Services
 {
     public class AuthServices:IAuthService
     {
-        public AuthRepository authRepository;
+        public AuthRepository _authRepository;
         public readonly IMapper _mapper;
-        public AuthServices(AuthRepository repository,IMapper mapper)
+        private readonly JwtOptions _jwtOptions;
+        public AuthServices(AuthRepository repository,IMapper mapper, JwtOptions jwtOptions)
         {
-            this.authRepository=repository;
+            this._authRepository=repository;
             this._mapper=mapper;
+            this._jwtOptions = jwtOptions;
         }
         public DbResponse Register(UserRegistrationDTO userRegistrationDTO)
         {
@@ -27,12 +30,12 @@ namespace BlogApi.Services
             });
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-            bool userExist=authRepository.UserExists(userRegistrationDTO);
+            bool userExist=_authRepository.UserExists(userRegistrationDTO);
             if(userExist)
             {
                 return DbResponse.Exists;
             }
-            var response= authRepository.Register(user);
+            var response= _authRepository.Register(user);
             return response;
         }
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
@@ -44,18 +47,22 @@ namespace BlogApi.Services
             }
         }
 
-        public DbResponse Login(UserLoginDTO userLoginDTO)
+        public (UserDTO userDTO,DbResponse response) Login(UserLoginDTO userLoginDTO)
         {
             var userId=userLoginDTO.UserID;
             var password=userLoginDTO.Password;
-
-            var user = authRepository.Login(userId);
+            var user = _authRepository.Login(userId);
             if(user == null)
-                return DbResponse.DoesNotExists; 
+                return (null,DbResponse.DoesNotExists); 
+            
+            var userDTO = _mapper.Map<User, UserDTO>(user, opt=>
+            {
+                opt.AfterMap((user, userDTO) => userDTO.JwtToken = _jwtOptions.GetToken(user));
+            }); 
 
             if(!VerifyPassword(password,user.PasswordHash,user.PasswordSalt))
-                return DbResponse.PasswordMissmach;
-            return DbResponse.Successful;
+                return (null,DbResponse.PasswordMissmach);
+            return (userDTO, DbResponse.Successful);
         }
         private bool VerifyPassword(string password,byte[] passwordHash, byte[] passwordSalt)
         {

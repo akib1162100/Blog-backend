@@ -5,6 +5,6 @@ namespace BlogApi.Services
     public interface IAuthService
     {
         DbResponse Register(UserRegistrationDTO userRegistrationDTO);
-        DbResponse Login(UserLoginDTO userLoginDTO);
+        (UserDTO userDTO, DbResponse response) Login(UserLoginDTO userLoginDTO);
     }
 }

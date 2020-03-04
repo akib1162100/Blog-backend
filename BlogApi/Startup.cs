@@ -14,7 +14,7 @@ using BlogApi.ExceptionHandler;
 using BlogApi.Data.Repository;
 using AutoMapper;
 using BlogApi.Services;
-
+using BlogApi.Jwt;
 
 namespace BlogApi
 {
@@ -29,6 +29,7 @@ namespace BlogApi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<JwtCredentials>(Configuration.GetSection("JwtCredentials"));
             services.AddDbContext<BlogContext>
             (opt=>opt.UseSqlServer(Configuration["ConnectionStrings:BlogContext"]));
             services.AddFilterControllers();
@@ -37,7 +38,8 @@ namespace BlogApi
             services.AddScoped<PostRepository>();    
             services.AddScoped<AuthRepository>();    
             services.AddScoped<BlogService>();
-            services.AddScoped<AuthServices>();    
+            services.AddScoped<AuthServices>();
+            services.AddSingleton<JwtOptions>();
             services.AddAutoMapper(typeof(AutoMapping));
         }
 

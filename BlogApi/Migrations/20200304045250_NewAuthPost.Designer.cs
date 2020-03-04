@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApi.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    [Migration("20200228042732_NewBlogPost")]
-    partial class NewBlogPost
+    [Migration("20200304045250_NewAuthPost")]
+    partial class NewAuthPost
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,6 +35,9 @@ namespace BlogApi.Migrations
                     b.Property<DateTime>("PublishedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ReporterId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(200)")
@@ -45,7 +48,38 @@ namespace BlogApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ReporterId");
+
                     b.ToTable("Blogs");
+                });
+
+            modelBuilder.Entity("BlogApi.Data.Models.User", b =>
+                {
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("PasswordHash")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("UserID");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("BlogApi.Data.Models.Blog", b =>
+                {
+                    b.HasOne("BlogApi.Data.Models.User", "Reporter")
+                        .WithMany()
+                        .HasForeignKey("ReporterId");
                 });
 #pragma warning restore 612, 618
         }

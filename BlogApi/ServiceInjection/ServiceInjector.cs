@@ -14,7 +14,6 @@ namespace BlogApi
                 options.Filters.Add(new ExceptionFilter())).AddXmlSerializerFormatters();
         }
         public static void AddJwtBearer(this IServiceCollection services,IConfiguration configuration){
-
             services.AddAuthentication(authOptions=>{
                 authOptions.DefaultAuthenticateScheme=JwtBearerDefaults.AuthenticationScheme;
                 authOptions.DefaultChallengeScheme=JwtBearerDefaults.AuthenticationScheme;
