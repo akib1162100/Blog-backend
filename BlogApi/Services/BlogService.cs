@@ -27,21 +27,19 @@ namespace BlogApi.Services
             List<Blog> blogs=postRepository.GetAll();
             List<BlogDTO> blogDTOs=blogs.Select(blog=>_mapper.Map<BlogDTO>(blog)).ToList();
             return blogDTOs;
-
         }  
-        public DbResponse Update (BlogDTO blogDTO)
+        public DbResponse Update (BlogDTO blogDTO,string userId)
         {
-            Blog blog = _mapper.Map<Blog>(blogDTO);
-            int blogId = blog.Id;
-            DbResponse messageEnum=postRepository.Update(blogId);
+            DbResponse messageEnum=postRepository.Update(blogDTO);
             return messageEnum;
         }
-        public BlogDTO Add(BlogDTO blogDTO)
+        public BlogDTO Add(BlogDTO blogDTO,string userId)
         {
             Blog blog=_mapper.Map<BlogDTO,Blog>(blogDTO,opt =>
             {
                 opt.BeforeMap((blogDTO,blog)=>blogDTO.Id=null);
             });
+            blog.ReporterId = userId;
             int receivedId=postRepository.Add(blog);
             if(receivedId!=0)
             {
@@ -53,9 +51,9 @@ namespace BlogApi.Services
                 return null;
             }
         }
-        public DbResponse Delete(int blogId)
+        public DbResponse Delete(int blogId,string userId)
         {
-            var messageEnum = postRepository.Delete(blogId);
+            var messageEnum = postRepository.Delete(blogId,userId);
             return messageEnum;
         }
     }

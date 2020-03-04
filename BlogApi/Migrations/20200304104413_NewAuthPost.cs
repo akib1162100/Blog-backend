@@ -32,7 +32,7 @@ namespace BlogApi.Migrations
                     Body = table.Column<string>(nullable: false),
                     PublishedDate = table.Column<DateTime>(nullable: false),
                     UpdationDate = table.Column<DateTime>(nullable: false),
-                    ReporterId = table.Column<string>(nullable: true)
+                    ReporterId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,7 +42,7 @@ namespace BlogApi.Migrations
                         column: x => x.ReporterId,
                         principalTable: "Users",
                         principalColumn: "UserID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

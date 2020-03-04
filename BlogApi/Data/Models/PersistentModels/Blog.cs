@@ -18,6 +18,7 @@ namespace BlogApi.Data.Models
         public DateTime UpdationDate {get;set;}
         public User Reporter { get; set; }
         [ForeignKey("Reporter")]
+        [Required]
         public string ReporterId { get; set; }
 
     }

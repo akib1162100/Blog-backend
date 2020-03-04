@@ -14,7 +14,8 @@ namespace BlogApi.Data.Repository
         }
         public Blog Get(int id)
         {
-            return _context.Blogs.Find(id);
+            Blog blog = _context.Blogs.FirstOrDefault(b => b.Id == id);
+            return blog;
         }        
         public List<Blog> GetAll()
         {
@@ -33,21 +34,28 @@ namespace BlogApi.Data.Repository
                 return 0;
             }
         }    
-        public DbResponse Update (int blogId)
+        public DbResponse Update (BlogDTO blogDTO)
         {
-            Blog findBlog =Get(blogId);
+            Blog findBlog =_context.Blogs.FirstOrDefault(b=>b.Id== blogDTO.Id);
             if (findBlog == null)
             {
                 return DbResponse.NotFound;
             }
-            _context.Blogs.Update(findBlog);
+            findBlog.Body = blogDTO.Body;
+            findBlog.Title = blogDTO.Title;
+            findBlog.PublishedDate = blogDTO.PublishedDate;
+            
             var status = _context.SaveChanges();
             return (status == 1) ? DbResponse.Updated : DbResponse.NotModified;
         }
         
-        public DbResponse Delete (int id)
+        public DbResponse Delete (int id,string userId)
         {
             var blog = Get(id);
+            if(blog.ReporterId!=userId)
+            {
+                return DbResponse.Forbidden;
+            }
             if(blog==null)
             {
                 return DbResponse.NotFound;

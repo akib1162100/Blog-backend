@@ -17,5 +17,6 @@ namespace BlogApi.Data
         DoesNotExists,
         Successful,
         PasswordMissmach,
+        Forbidden,
     }
 }

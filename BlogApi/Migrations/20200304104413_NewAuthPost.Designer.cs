@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApi.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    [Migration("20200304045250_NewAuthPost")]
+    [Migration("20200304104413_NewAuthPost")]
     partial class NewAuthPost
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,7 @@ namespace BlogApi.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ReporterId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
@@ -79,7 +80,9 @@ namespace BlogApi.Migrations
                 {
                     b.HasOne("BlogApi.Data.Models.User", "Reporter")
                         .WithMany()
-                        .HasForeignKey("ReporterId");
+                        .HasForeignKey("ReporterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

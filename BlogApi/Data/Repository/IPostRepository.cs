@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using BlogApi.Data;
+using BlogApi.Data.Models;
+
 namespace BlogApi.Data.Repository
 {
     public interface IPostRepository<IdType, EntityType>
@@ -7,7 +9,7 @@ namespace BlogApi.Data.Repository
         EntityType Get(IdType id);
         List<EntityType> GetAll();
         int Add(EntityType entity);
-        DbResponse Update(IdType id);
-        DbResponse Delete(IdType id);
+        DbResponse Update(BlogDTO  blogDTO);
+        DbResponse Delete(IdType id,string userId);
     }
 }

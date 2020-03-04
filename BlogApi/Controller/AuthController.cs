@@ -43,7 +43,7 @@ namespace BlogApi.Controller
             {
                 return BadRequest("Invalid password");
             }
-            return Ok(result.userDTO);
+            return Ok(result.userDTO.JwtToken);
         }
     }
 }
