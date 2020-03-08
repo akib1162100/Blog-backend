@@ -14,6 +14,7 @@ namespace BlogApi.Data.Models
         [DataType(DataType.Date)]
         public DateTime PublishedDate {get;set;}
         public DateTime UpdationDate {get;set;}
-
+        public string authorId { get; set; } 
+        public AuthorDTO author { get; set; }
     }
 }

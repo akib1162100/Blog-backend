@@ -12,6 +12,9 @@ namespace BlogApi.Data
         Failed,
         NotFound,
         NotModified,
-        Deleted
+        Deleted,
+        Success,
+        Exists,
+        DoesnotExists,
     }
 }
