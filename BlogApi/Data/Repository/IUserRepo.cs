@@ -10,6 +10,5 @@ namespace BlogApi.Data.Repository
     {
         User Get(string uid);
         DbResponse Add(User user);
-        DbResponse Update(string uid);
     }
 }
