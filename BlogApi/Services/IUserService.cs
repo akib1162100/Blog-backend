@@ -10,6 +10,6 @@ namespace BlogApi.Services
     public interface IUserService
     {
         DbResponse Registration(UserRegisterDTO registerDTO);
-        DbResponse Login(UserLoginDTO loginDTO);
+        (UserDTO userDTO,DbResponse response) Login(UserLoginDTO loginDTO);
     }
 }

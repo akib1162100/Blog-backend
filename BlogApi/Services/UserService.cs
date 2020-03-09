@@ -2,6 +2,7 @@
 using BlogApi.Data;
 using BlogApi.Data.Models;
 using BlogApi.Data.Repository;
+using BlogApi.Jwt;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,20 +14,31 @@ namespace BlogApi.Services
     {
         private readonly IUserRepo _userRepo;
         private readonly IMapper _mapper;
-        public UserService(IUserRepo userRepo,IMapper mapper)
+        private readonly JwtOptions _jwtOptions;
+
+        public UserService(UserRepo userRepo,IMapper mapper, JwtOptions jwtOptions)
         {
             _userRepo = userRepo;
             _mapper = mapper;
+            _jwtOptions = jwtOptions;
         }
-        public DbResponse Login(UserLoginDTO loginDTO)
+        public (UserDTO userDTO, DbResponse response) Login(UserLoginDTO loginDTO)
         {
             User user = _userRepo.Get(loginDTO.UserId);
+            if(user==null)
+            {
+                return (null,DbResponse.DoesnotExists);
+            }
             var verify = VerifyPassword(loginDTO.PassWord, user.PasswordHash, user.PasswordSalt);
             if(!verify)
             {
-                return DbResponse.Failed;
+                return (null,DbResponse.Failed);
             }
-            return DbResponse.Success;
+            UserDTO userDTO = _mapper.Map<User, UserDTO>(user, opt=>
+            {
+                opt.AfterMap((user, userDTO) => userDTO.JwtToken = _jwtOptions.GetToken(user));
+            });
+            return (userDTO, DbResponse.Success);
         }
 
         public DbResponse Registration(UserRegisterDTO registerDTO)

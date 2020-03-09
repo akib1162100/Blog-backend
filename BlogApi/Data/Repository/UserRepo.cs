@@ -17,7 +17,7 @@ namespace BlogApi.Data.Repository
         {
             _context.Users.Add(user);
             int staus=_context.SaveChanges();
-            if (staus == 0)
+            if (staus == 1)
             {
                 return DbResponse.Added;
             }

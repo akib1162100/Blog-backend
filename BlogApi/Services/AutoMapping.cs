@@ -12,6 +12,10 @@ namespace BlogApi.Services
             CreateMap<User, UserRegisterDTO>();
             CreateMap<User, UserLoginDTO>();
             CreateMap<UserLoginDTO, User>();
+            CreateMap<UserDTO, User>();
+            CreateMap<User, UserDTO>();
+            CreateMap<User, AuthorDTO>();
+            CreateMap<AuthorDTO,User>();
         }
     }
 }
