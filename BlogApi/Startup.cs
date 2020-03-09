@@ -35,12 +35,13 @@ namespace BlogApi
             services.AddControllers(options =>
                 options.Filters.Add(new ExceptionFilter())).AddXmlSerializerFormatters();
             services.AddJwtBearer(Configuration);
-            services.AddScoped<PostRepository>();    
+            services.AddScoped<BlogRepository>();    
             services.AddScoped<UserRepo>();    
             services.AddScoped<BlogService>();
             services.AddScoped<UserService>();
             services.AddSingleton<JwtOptions>();
             services.AddAutoMapper(typeof(AutoMapping));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,7 +49,8 @@ namespace BlogApi
         {
     
             app.UseRouting();
-
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

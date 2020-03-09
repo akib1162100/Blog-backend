@@ -16,5 +16,6 @@ namespace BlogApi.Data
         Success,
         Exists,
         DoesnotExists,
+        NotAllowed,
     }
 }

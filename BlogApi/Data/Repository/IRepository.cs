@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using BlogApi.Data;
+using BlogApi.Data.Models;
+
 namespace BlogApi.Data.Repository
 {
-    public interface IRepository<IdType, EntityType>
+    public interface IRepository
     {
-        EntityType Get(IdType id);
-        List<EntityType> GetAll();
-        int Add(EntityType entity);
-        DbResponse Update(IdType id);
-        DbResponse Delete(IdType id);
+        Blog Get(int id);
+        List<Blog> GetAll();
+        int Add(Blog entity);
+        DbResponse Update(BlogDTO blogDTO,string uId);
+        DbResponse Delete(int id, string uId);
     }
 }
