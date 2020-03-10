@@ -28,6 +28,10 @@ namespace BlogApi.Data.Repository
         {
             _context.Add(blog);
             int status= _context.SaveChanges();
+            if(status==0)
+            {
+                throw new System.Exception();
+            }
             return blog.Id;           
         }    
         public DbResponse Update (BlogDTO blogDTO,string userId)

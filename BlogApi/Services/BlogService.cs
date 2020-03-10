@@ -47,19 +47,11 @@ namespace BlogApi.Services
         }
         public DbResponse Update (BlogDTO blogDTO,string userId)
         {
-            if(userId==null)
-            {
-                return DbResponse.DoesnotExists;
-            }
             DbResponse messageEnum=postRepository.Update(blogDTO,userId);
             return messageEnum;
         }
         public (BlogDTO blogDTO,DbResponse response) Add(BlogDTO blogDTO, string userId)
         {
-            if (userId == null)
-            {
-                return (null,DbResponse.DoesnotExists);
-            }
             Blog blog=_mapper.Map<BlogDTO,Blog>(blogDTO,opt =>
             {
                 opt.BeforeMap((blogDTO,blog)=>blogDTO.Id=null);
@@ -67,15 +59,10 @@ namespace BlogApi.Services
             blog.UserId = userId;
             int receivedId=postRepository.Add(blog);
             blogDTO.Id = receivedId;
-            return (blogDTO,DbResponse.Added);
-            
+            return (blogDTO,DbResponse.Added);   
         }
         public DbResponse Delete(int blogId, string userId)
         {
-            if (userId == null)
-            {
-                return DbResponse.DoesnotExists;
-            }
             var messageEnum = postRepository.Delete(blogId, userId);
             return messageEnum;
         }

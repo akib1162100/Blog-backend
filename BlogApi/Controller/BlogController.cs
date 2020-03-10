@@ -10,18 +10,19 @@ using AutoMapper;
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace BlogApi.Controller
 {
     [ApiController]
-    [Authorize]
+    [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     public class BlogController : ControllerBase
     {
         private readonly IBlogService blogService;
         public BlogController(IBlogService service) => blogService = service;
 
-        public string FindId()
+        public string FindUserIdFromJwt()
         {
             string userId = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == System.Security.Claims.ClaimTypes.Sid).Value;
             return userId;
@@ -29,17 +30,9 @@ namespace BlogApi.Controller
         [HttpPost]
         public IActionResult PostBlogItems(BlogDTO blogDTO)
         {
-            string userId = FindId();
+            string userId = FindUserIdFromJwt();
             var result = blogService.Add(blogDTO,userId);
             string relativeUri = $"{HttpContext.Request.GetDisplayUrl()}/ {result.blogDTO.Id.ToString()}";
-            if(result.response==DbResponse.DoesnotExists)
-            {
-                return Unauthorized("User not Found");
-            }
-            if(result.response==DbResponse.Failed)
-            {
-                return BadRequest("Blog Post failed");
-            }
             return Created(relativeUri, result.blogDTO);
         }
         [HttpGet]
@@ -63,12 +56,8 @@ namespace BlogApi.Controller
         [HttpPut]
         public IActionResult PutItem(BlogDTO blogDTO)
         {
-            string userId = FindId();
+            string userId = FindUserIdFromJwt();
             var result = blogService.Update(blogDTO, userId);
-            if (result== DbResponse.DoesnotExists)
-            {
-                return Unauthorized("User not Found");
-            }
             if (result==DbResponse.NotAllowed)
             {
                 return Forbid("This is not your post");
@@ -89,12 +78,8 @@ namespace BlogApi.Controller
         [HttpDelete("{blogId}")]
         public IActionResult DeletePost(int blogId)
         {
-            string userId = FindId();
+            string userId = FindUserIdFromJwt();
             var result = blogService.Delete(blogId,userId);
-            if(result==DbResponse.DoesnotExists)
-            {
-                return Unauthorized("User not Found");
-            }
             if (result == DbResponse.Deleted)
             {
                 return Ok("Successfully Deleted");
