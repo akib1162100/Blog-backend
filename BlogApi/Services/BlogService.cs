@@ -9,9 +9,9 @@ namespace BlogApi.Services
 {
     public class BlogService : IBlogService
     {
-        public PostRepository postRepository;
+        public IRepository postRepository;
         public readonly IMapper _mapper;
-        public BlogService (PostRepository repository,IMapper mapper)
+        public BlogService (IRepository repository,IMapper mapper)
         {
             this.postRepository=repository;
             this._mapper=mapper;
@@ -19,43 +19,64 @@ namespace BlogApi.Services
         public BlogDTO Get(int id)
         {
             Blog blog=postRepository.Get(id);
+            if(blog==null)
+            {
+                return null;
+            }
             BlogDTO blogDTO=_mapper.Map<BlogDTO>(blog);
+            blogDTO.Author = GetMapper(blog.User);
             return blogDTO;
         }     
         public List<BlogDTO> GetAll()
         {   
             List<Blog> blogs=postRepository.GetAll();
-            List<BlogDTO> blogDTOs=blogs.Select(blog=>_mapper.Map<BlogDTO>(blog)).ToList();
+            BlogDTO blogDTO;
+            List<BlogDTO> blogDTOs=blogs.Select(blog=>blogDTO=_mapper.Map<Blog,BlogDTO>(blog,opt=>
+            {
+                opt.AfterMap((blog, blogDTO)=>blogDTO.Author=GetMapper(blog.User));
+            })).ToList();
             return blogDTOs;
-
         }  
-        public MessageEnum Update (BlogDTO blogDTO)
+        public AuthorDTO GetMapper(User user)
         {
-            Blog blog = _mapper.Map<Blog>(blogDTO);
-            int blogId = blog.Id;
-            MessageEnum messageEnum=postRepository.Update(blogId);
+            AuthorDTO author = _mapper.Map<User, AuthorDTO>(user, opt =>
+            {
+                opt.AfterMap((user, author) => author.AuthorId = user.UserId);
+            });
+            return author;
+        }
+        public DbResponse Update (BlogDTO blogDTO,string userId)
+        {
+            if(userId==null)
+            {
+                return DbResponse.DoesnotExists;
+            }
+            DbResponse messageEnum=postRepository.Update(blogDTO,userId);
             return messageEnum;
         }
-        public BlogDTO Add(BlogDTO blogDTO)
+        public (BlogDTO blogDTO,DbResponse response) Add(BlogDTO blogDTO, string userId)
         {
+            if (userId == null)
+            {
+                return (null,DbResponse.DoesnotExists);
+            }
             Blog blog=_mapper.Map<BlogDTO,Blog>(blogDTO,opt =>
             {
                 opt.BeforeMap((blogDTO,blog)=>blogDTO.Id=null);
             });
+            blog.UserId = userId;
             int receivedId=postRepository.Add(blog);
-            if(receivedId!=0)
-            {
-                blogDTO.Id = receivedId;
-                return blogDTO;
-            }
-            else
-            {
-                return null;
-            }
+            blogDTO.Id = receivedId;
+            return (blogDTO,DbResponse.Added);
+            
         }
-        public MessageEnum Delete(int blogId)
+        public DbResponse Delete(int blogId, string userId)
         {
-            var messageEnum = postRepository.Delete(blogId);
+            if (userId == null)
+            {
+                return DbResponse.DoesnotExists;
+            }
+            var messageEnum = postRepository.Delete(blogId, userId);
             return messageEnum;
         }
     }

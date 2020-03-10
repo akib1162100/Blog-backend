@@ -14,7 +14,7 @@ using BlogApi.ExceptionHandler;
 using BlogApi.Data.Repository;
 using AutoMapper;
 using BlogApi.Services;
-
+using BlogApi.Jwt;
 
 namespace BlogApi
 {
@@ -29,13 +29,19 @@ namespace BlogApi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<JwtModel>(Configuration.GetSection("JwtModel"));
             services.AddDbContext<BlogContext>
             (opt=>opt.UseSqlServer(Configuration["ConnectionStrings:BlogContext"]));
             services.AddControllers(options =>
-                options.Filters.Add(new ExceptionFilter())).AddXmlSerializerFormatters(); 
-            services.AddScoped<PostRepository>();    
-            services.AddScoped<BlogService>();
+                options.Filters.Add(new ExceptionFilter())).AddXmlSerializerFormatters();
+            services.AddJwtBearer(Configuration);
+            services.AddScoped<IRepository,BlogRepository>();    
+            services.AddScoped<IUserRepo,UserRepo>();    
+            services.AddScoped<IBlogService,BlogService>();
+            services.AddScoped<IUserService,UserService>();
+            services.AddSingleton<JwtOptions>();
             services.AddAutoMapper(typeof(AutoMapping));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,7 +49,8 @@ namespace BlogApi
         {
     
             app.UseRouting();
-
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

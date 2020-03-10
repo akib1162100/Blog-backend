@@ -11,5 +11,6 @@ namespace BlogApi.Data.Models
         public string Body {get;set;}  
         [Required]
         public DateTime PublishedDate {get;set;}
+        public AuthorDTO Author { get; set; }
     }
 }

@@ -5,13 +5,17 @@ using System.Threading.Tasks;
 
 namespace BlogApi.Data
 {
-    public enum MessageEnum
+    public enum DbResponse
     {
         Added,
         Updated,
         Failed,
         NotFound,
         NotModified,
-        Deleted
+        Deleted,
+        Success,
+        Exists,
+        DoesnotExists,
+        NotAllowed,
     }
 }

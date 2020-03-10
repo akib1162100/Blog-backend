@@ -8,9 +8,8 @@ namespace BlogApi.Services
     {
         BlogDTO Get(int id);
         List<BlogDTO> GetAll();
-        BlogDTO Add(BlogDTO entity);
-        MessageEnum Update(BlogDTO blogDTO);
-        MessageEnum Delete(int id);
-
+        (BlogDTO blogDTO, DbResponse response) Add(BlogDTO entity,string uId);
+        DbResponse Update(BlogDTO blogDTO, string uId);
+        DbResponse Delete(int id, string uId);
     }
 }

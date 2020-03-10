@@ -4,14 +4,16 @@ using BlogApi.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlogApi.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    partial class BlogContextModelSnapshot : ModelSnapshot
+    [Migration("20200309060847_UserCreatenew")]
+    partial class UserCreatenew
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,6 +28,9 @@ namespace BlogApi.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AuthorId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Body")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -38,12 +43,12 @@ namespace BlogApi.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<DateTime>("UpdationDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AuthorId");
 
                     b.ToTable("Blogs");
                 });
@@ -72,9 +77,9 @@ namespace BlogApi.Migrations
 
             modelBuilder.Entity("BlogApi.Data.Models.Blog", b =>
                 {
-                    b.HasOne("BlogApi.Data.Models.User", "User")
+                    b.HasOne("BlogApi.Data.Models.User", "Author")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("AuthorId");
                 });
 #pragma warning restore 612, 618
         }
