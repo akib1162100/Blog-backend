@@ -19,6 +19,10 @@ namespace BlogApi.Services
         public BlogDTO Get(int id)
         {
             Blog blog=postRepository.Get(id);
+            if(blog==null)
+            {
+                return null;
+            }
             BlogDTO blogDTO=_mapper.Map<BlogDTO>(blog);
             blogDTO.Author = GetMapper(blog.User);
             return blogDTO;
@@ -62,15 +66,9 @@ namespace BlogApi.Services
             });
             blog.UserId = userId;
             int receivedId=postRepository.Add(blog);
-            if(receivedId!=0)
-            {
-                blogDTO.Id = receivedId;
-                return (blogDTO,DbResponse.Added);
-            }
-            else
-            {
-                return (null,DbResponse.Failed);
-            }
+            blogDTO.Id = receivedId;
+            return (blogDTO,DbResponse.Added);
+            
         }
         public DbResponse Delete(int blogId, string userId)
         {

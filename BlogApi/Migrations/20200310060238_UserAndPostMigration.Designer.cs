@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApi.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    [Migration("20200309062649_NewUserCreate")]
-    partial class NewUserCreate
+    [Migration("20200310060238_UserAndPostMigration")]
+    partial class UserAndPostMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,9 +28,6 @@ namespace BlogApi.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuthorId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Body")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -43,12 +40,12 @@ namespace BlogApi.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<DateTime>("UpdationDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Blogs");
                 });
@@ -77,9 +74,9 @@ namespace BlogApi.Migrations
 
             modelBuilder.Entity("BlogApi.Data.Models.Blog", b =>
                 {
-                    b.HasOne("BlogApi.Data.Models.User", "Author")
+                    b.HasOne("BlogApi.Data.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

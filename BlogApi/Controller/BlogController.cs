@@ -21,19 +21,24 @@ namespace BlogApi.Controller
         private readonly IBlogService blogService;
         public BlogController(IBlogService service) => blogService = service;
 
+        public string FindId()
+        {
+            string userId = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == System.Security.Claims.ClaimTypes.Sid).Value;
+            return userId;
+        }
         [HttpPost]
         public IActionResult PostBlogItems(BlogDTO blogDTO)
         {
-            string userId = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == System.Security.Claims.ClaimTypes.Sid).Value;
+            string userId = FindId();
             var result = blogService.Add(blogDTO,userId);
             string relativeUri = $"{HttpContext.Request.GetDisplayUrl()}/ {result.blogDTO.Id.ToString()}";
             if(result.response==DbResponse.DoesnotExists)
             {
-                return BadRequest("User not in Database");
+                return Unauthorized("User not Found");
             }
             if(result.response==DbResponse.Failed)
             {
-                return BadRequest("Post failed");
+                return BadRequest("Blog Post failed");
             }
             return Created(relativeUri, result.blogDTO);
         }
@@ -41,12 +46,8 @@ namespace BlogApi.Controller
         [AllowAnonymous]
         public IActionResult GetAllBlogItems()
         {
-            var blogs = blogService.GetAll();
-            if (blogs == null)
-            {
-                return NotFound();
-            }
-            return Ok(blogs);
+            var blogDTOs = blogService.GetAll();
+            return Ok(blogDTOs);
         }
         [HttpGet("{blogId}")]
         [AllowAnonymous]
@@ -62,16 +63,15 @@ namespace BlogApi.Controller
         [HttpPut]
         public IActionResult PutItem(BlogDTO blogDTO)
         {
-            string userId = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == System.Security.Claims.ClaimTypes.Sid).Value;
+            string userId = FindId();
             var result = blogService.Update(blogDTO, userId);
-            string relativeUri = $"{HttpContext.Request.GetDisplayUrl()}/ {blogDTO.Id.ToString()}";
             if (result== DbResponse.DoesnotExists)
             {
-                return BadRequest("User not in Database");
+                return Unauthorized("User not Found");
             }
             if (result==DbResponse.NotAllowed)
             {
-                return BadRequest("This is not your post");
+                return Forbid("This is not your post");
             }
             if (result == DbResponse.Updated)
             {
@@ -89,15 +89,23 @@ namespace BlogApi.Controller
         [HttpDelete("{blogId}")]
         public IActionResult DeletePost(int blogId)
         {
-            string userId = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == System.Security.Claims.ClaimTypes.Sid).Value;
+            string userId = FindId();
             var result = blogService.Delete(blogId,userId);
             if(result==DbResponse.DoesnotExists)
             {
-                return BadRequest("User not in database");
+                return Unauthorized("User not Found");
             }
             if (result == DbResponse.Deleted)
             {
                 return Ok("Successfully Deleted");
+            }
+            if(result==DbResponse.NotFound)
+            {
+                return BadRequest("Blog not found");
+            }
+            if(result==DbResponse.NotAllowed)
+            {
+                return Forbid("This is not your post");
             }
             return NoContent();
         }

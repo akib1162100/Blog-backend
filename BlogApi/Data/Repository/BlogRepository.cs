@@ -28,19 +28,12 @@ namespace BlogApi.Data.Repository
         {
             _context.Add(blog);
             int status= _context.SaveChanges();
-            if(status==1)
-            {
-                return blog.Id;
-            }
-            else
-            {
-                return 0;
-            }
+            return blog.Id;           
         }    
         public DbResponse Update (BlogDTO blogDTO,string userId)
         {
             Blog findBlog = _context.Blogs.FirstOrDefault(b => b.Id == blogDTO.Id); 
-            if(findBlog.UserId!=userId)
+            if(findBlog.UserId.Equals(userId))
             {
                 return DbResponse.NotAllowed;
             } 
@@ -61,7 +54,7 @@ namespace BlogApi.Data.Repository
             {
                 return DbResponse.NotFound;
             }
-            if(blog.UserId!=userId)
+            if(blog.UserId.Equals(userId))
             {
                 return DbResponse.NotAllowed;
             }

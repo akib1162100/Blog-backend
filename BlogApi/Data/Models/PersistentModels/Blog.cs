@@ -15,7 +15,6 @@ namespace BlogApi.Data.Models
         [Required]
         [DataType(DataType.Date)]
         public DateTime PublishedDate { get; set; }
-        public DateTime UpdationDate { get; set; }
         [ForeignKey("User")]
         public string UserId { get; set; } 
         public User User { get; set; }
