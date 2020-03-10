@@ -30,7 +30,7 @@ namespace BlogApi.Data.Repository
             int status= _context.SaveChanges();
             if(status==0)
             {
-                throw new System.Exception();
+                throw new System.Exception("Dbcontext.Savechanges return's zero error");
             }
             return blog.Id;           
         }    
