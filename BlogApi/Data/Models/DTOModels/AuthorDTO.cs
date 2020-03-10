@@ -8,9 +8,7 @@ namespace BlogApi.Data.Models
 {
     public class AuthorDTO
     {
-        [Required]
         public string AuthorId { get; set; }
-        [Required]
         public string FullName { get; set; }
     }
 }
