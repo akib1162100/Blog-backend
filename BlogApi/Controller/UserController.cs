@@ -14,7 +14,7 @@ namespace BlogApi.Controller
     public class UserController: ControllerBase
     {
         private IUserService _userService;
-        public UserController(UserService userService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }

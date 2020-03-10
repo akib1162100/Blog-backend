@@ -35,10 +35,10 @@ namespace BlogApi
             services.AddControllers(options =>
                 options.Filters.Add(new ExceptionFilter())).AddXmlSerializerFormatters();
             services.AddJwtBearer(Configuration);
-            services.AddScoped<BlogRepository>();    
-            services.AddScoped<UserRepo>();    
-            services.AddScoped<BlogService>();
-            services.AddScoped<UserService>();
+            services.AddScoped<IRepository,BlogRepository>();    
+            services.AddScoped<IUserRepo,UserRepo>();    
+            services.AddScoped<IBlogService,BlogService>();
+            services.AddScoped<IUserService,UserService>();
             services.AddSingleton<JwtOptions>();
             services.AddAutoMapper(typeof(AutoMapping));
 

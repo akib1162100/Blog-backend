@@ -19,7 +19,7 @@ namespace BlogApi.Controller
     public class BlogController : ControllerBase
     {
         private readonly IBlogService blogService;
-        public BlogController(BlogService service) => blogService = service;
+        public BlogController(IBlogService service) => blogService = service;
 
         [HttpPost]
         public IActionResult PostBlogItems(BlogDTO blogDTO)

@@ -9,9 +9,9 @@ namespace BlogApi.Services
 {
     public class BlogService : IBlogService
     {
-        public BlogRepository postRepository;
+        public IRepository postRepository;
         public readonly IMapper _mapper;
-        public BlogService (BlogRepository repository,IMapper mapper)
+        public BlogService (IRepository repository,IMapper mapper)
         {
             this.postRepository=repository;
             this._mapper=mapper;
@@ -20,20 +20,27 @@ namespace BlogApi.Services
         {
             Blog blog=postRepository.Get(id);
             BlogDTO blogDTO=_mapper.Map<BlogDTO>(blog);
-            User user = blog.User;
-            AuthorDTO author = _mapper.Map<User,AuthorDTO>(user,opt=>
-            {
-                opt.AfterMap((user, author)=>author.AuthorId=user.UserId);
-            });
-            blogDTO.Author = author;
+            blogDTO.Author = GetMapper(blog.User);
             return blogDTO;
         }     
         public List<BlogDTO> GetAll()
         {   
             List<Blog> blogs=postRepository.GetAll();
-            List<BlogDTO> blogDTOs=blogs.Select(blog=>_mapper.Map<BlogDTO>(blog)).ToList();
+            BlogDTO blogDTO;
+            List<BlogDTO> blogDTOs=blogs.Select(blog=>blogDTO=_mapper.Map<Blog,BlogDTO>(blog,opt=>
+            {
+                opt.AfterMap((blog, blogDTO)=>blogDTO.Author=GetMapper(blog.User));
+            })).ToList();
             return blogDTOs;
         }  
+        public AuthorDTO GetMapper(User user)
+        {
+            AuthorDTO author = _mapper.Map<User, AuthorDTO>(user, opt =>
+            {
+                opt.AfterMap((user, author) => author.AuthorId = user.UserId);
+            });
+            return author;
+        }
         public DbResponse Update (BlogDTO blogDTO,string userId)
         {
             if(userId==null)

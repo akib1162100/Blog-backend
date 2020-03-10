@@ -16,7 +16,7 @@ namespace BlogApi.Services
         private readonly IMapper _mapper;
         private readonly JwtOptions _jwtOptions;
 
-        public UserService(UserRepo userRepo,IMapper mapper, JwtOptions jwtOptions)
+        public UserService(IUserRepo userRepo,IMapper mapper, JwtOptions jwtOptions)
         {
             _userRepo = userRepo;
             _mapper = mapper;

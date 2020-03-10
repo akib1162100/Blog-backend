@@ -20,7 +20,9 @@ namespace BlogApi.Data.Repository
         }        
         public List<Blog> GetAll()
         {
-            return _context.Blogs.ToList();
+            List<Blog>blogs= _context.Blogs.Include(blog => blog.User).ToList();
+
+            return blogs;
         }
         public int Add(Blog blog)
         {

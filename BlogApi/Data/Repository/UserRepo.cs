@@ -29,9 +29,5 @@ namespace BlogApi.Data.Repository
         {
             return _context.Users.FirstOrDefault(user=>user.UserId==uid);
         }
-        public DbResponse Update(string uid)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
