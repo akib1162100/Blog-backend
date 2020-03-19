@@ -37,7 +37,7 @@ namespace BlogApi.Data.Repository
         public DbResponse Update (BlogDTO blogDTO,string userId)
         {
             Blog findBlog = _context.Blogs.FirstOrDefault(b => b.Id == blogDTO.Id); 
-            if(findBlog.UserId.Equals(userId))
+            if(!findBlog.UserId.Equals(userId))
             {
                 return DbResponse.NotAllowed;
             } 
@@ -58,7 +58,7 @@ namespace BlogApi.Data.Repository
             {
                 return DbResponse.NotFound;
             }
-            if(blog.UserId.Equals(userId))
+            if(!blog.UserId.Equals(userId))
             {
                 return DbResponse.NotAllowed;
             }

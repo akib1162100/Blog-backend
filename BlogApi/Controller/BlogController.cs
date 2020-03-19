@@ -24,7 +24,7 @@ namespace BlogApi.Controller
 
         public string FindUserIdFromJwt()
         {
-            string userId = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == System.Security.Claims.ClaimTypes.Sid).Value;
+            string userId = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == "UserId").Value;
             return userId;
         }
         [HttpPost]

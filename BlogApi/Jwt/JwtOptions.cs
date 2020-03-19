@@ -22,7 +22,7 @@ namespace BlogApi.Jwt
         public string GetToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtModel.Value.Key));
-            var claims = new List<Claim> { new Claim(ClaimTypes.Sid, user.UserId), new Claim("Cefalo", "akib") };
+            var claims = new List<Claim> { new Claim("UserId", user.UserId), new Claim("Cefalo", "akib") };
             var securityToken = new JwtSecurityToken(
                 issuer: _jwtModel.Value.ValidIssuer,
                 audience: _jwtModel.Value.ValidAudience,

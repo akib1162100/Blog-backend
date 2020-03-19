@@ -35,7 +35,19 @@ namespace BlogApi
             services.AddControllers(options =>
                 options.Filters.Add(new ExceptionFilter())).AddXmlSerializerFormatters();
             services.AddJwtBearer(Configuration);
-            services.AddScoped<IRepository,BlogRepository>();    
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigin",
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000")
+                                              .AllowAnyOrigin()
+                                              .AllowAnyMethod()
+                                              .AllowAnyHeader();
+                });
+            });
+        
+        services.AddScoped<IRepository,BlogRepository>();    
             services.AddScoped<IUserRepo,UserRepo>();    
             services.AddScoped<IBlogService,BlogService>();
             services.AddScoped<IUserService,UserService>();
@@ -49,6 +61,7 @@ namespace BlogApi
         {
     
             app.UseRouting();
+            app.UseCors("AllowOrigin");
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>

@@ -32,6 +32,7 @@ namespace BlogApi.Controller
             }
             return BadRequest();
         }
+        
         [HttpPost("[action]")]
         public IActionResult Login(UserLoginDTO userLoginDTO)
         {
