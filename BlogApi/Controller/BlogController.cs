@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace BlogApi.Controller
 {
     [ApiController]
-    [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     public class BlogController : ControllerBase
     {
@@ -31,17 +31,37 @@ namespace BlogApi.Controller
         public IActionResult PostBlogItems(BlogDTO blogDTO)
         {
             string userId = FindUserIdFromJwt();
-            var result = blogService.Add(blogDTO,userId);
+            var result = blogService.Add(blogDTO, userId);
             string relativeUri = $"{HttpContext.Request.GetDisplayUrl()}/ {result.blogDTO.Id.ToString()}";
             return Created(relativeUri, result.blogDTO);
         }
-        [HttpGet]
+        [HttpGet("{top}/{skip}")]
         [AllowAnonymous]
-        public IActionResult GetAllBlogItems()
+        public IActionResult GetAllBlogItems(int top, int skip)
         {
             var blogDTOs = blogService.GetAll();
-            return Ok(blogDTOs);
+            var length = blogDTOs.Count();
+            if((skip+top)>length)
+            {
+                top = length - skip;
+                if(top<=0)
+                {
+                    return NoContent();
+                }
+            }
+            var blogs=blogDTOs.GetRange(skip, top);
+
+            return Ok(blogs);
         }
+        [HttpGet("count")]
+        [AllowAnonymous]
+        public IActionResult GetAllBlogCount()
+        {
+            var blogDTOs = blogService.GetAll();
+            int blogCount = blogDTOs.Count();
+            return Ok(blogCount);
+        }
+
         [HttpGet("{blogId}")]
         [AllowAnonymous]
         public IActionResult GetBlogItem(int blogId)
